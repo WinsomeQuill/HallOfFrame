@@ -1,4 +1,5 @@
 using HallOfFame_Test.Models;
+using Serilog;
 
 namespace HallOfFame_Test
 {
@@ -11,7 +12,13 @@ namespace HallOfFame_Test
             builder.Services.AddControllers();
             
             builder.Services.AddSwaggerGen();
-
+            
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("log.txt")
+                .MinimumLevel.Debug()
+                .CreateLogger();
+            
             var app = builder.Build();
 
             app.UseAuthorization();

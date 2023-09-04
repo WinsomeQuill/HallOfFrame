@@ -1,6 +1,7 @@
 using HallOfFame_Test.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace HallOfFame_Test.Controllers
 {
@@ -26,8 +27,9 @@ namespace HallOfFame_Test.Controllers
                     return Ok(persons);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.Logger.Error(e.Message);
                 return StatusCode(500);
             }
         }
@@ -39,6 +41,7 @@ namespace HallOfFame_Test.Controllers
         {
             try
             {
+                Log.Logger.Debug($"Get person by id: {id}");
                 using (ApplicationContext db = new())
                 {
                     Person? person = db.Persons.Include(p => p.skills).FirstOrDefault(x => x.id == id);
@@ -47,6 +50,7 @@ namespace HallOfFame_Test.Controllers
             }
             catch (Exception)
             {
+                Log.Logger.Error(e.Message);
                 return StatusCode(500);
             }
         }
@@ -65,6 +69,7 @@ namespace HallOfFame_Test.Controllers
             }
             catch (Exception)
             {
+                Log.Logger.Error(e.Message);
                 return StatusCode(500);
             }
         }
@@ -74,6 +79,7 @@ namespace HallOfFame_Test.Controllers
         {
             try
             {
+                Log.Logger.Debug($"Update person by id: {id}");
                 using (ApplicationContext db = new ApplicationContext())
                 {
                     Person findPerson = db.Persons.Include(p => p.skills).FirstOrDefault(x => x.id == id);
@@ -105,6 +111,7 @@ namespace HallOfFame_Test.Controllers
             }
             catch (Exception)
             {
+                Log.Logger.Error(e.Message);
                 return StatusCode(500);
             }
         }
@@ -128,8 +135,9 @@ namespace HallOfFame_Test.Controllers
                     return StatusCode(200);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.Logger.Error(e.Message);
                 return StatusCode(500);
             }
         }
