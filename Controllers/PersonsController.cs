@@ -37,6 +37,7 @@ namespace HallOfFame_Test.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Person))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Person(long id)
         {
             try
@@ -61,6 +62,8 @@ namespace HallOfFame_Test.Controllers
         }
         
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult CreatePerson(Person person)
         {
             try
@@ -80,6 +83,9 @@ namespace HallOfFame_Test.Controllers
         }
         
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult UpdatePerson(long id, Person person)
         {
             try
@@ -127,6 +133,9 @@ namespace HallOfFame_Test.Controllers
         }
         
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult DeletePerson(long id)
         {
             try
