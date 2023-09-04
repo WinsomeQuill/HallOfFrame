@@ -1,0 +1,31 @@
+﻿version: '3'
+
+services:
+  hof:
+    image: hof
+    container_name: hof-asp-net
+    restart: always
+    tty: true
+    ports:
+      - "5112:5112"
+    depends_on:
+      - postgres-db
+    networks:
+      - my-network
+
+  # Not using. Maybe i can connecting?
+  postgres-db:
+    image: postgres:latest
+    container_name: postgresql-db
+    restart: always
+    environment:
+      - POSTGRES_HOST=127.0.0.1
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=HOF_Test
+      - POSTGRES_USER=artem
+      - POSTGRES_PASSWORD=kukushka1337
+    networks:
+      - my-network
+
+networks:
+  my-network:

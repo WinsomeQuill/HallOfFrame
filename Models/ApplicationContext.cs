@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace HallOfFame_Test.Models
 {
@@ -18,7 +19,15 @@ namespace HallOfFame_Test.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=HOF_Test;Username=artem;Password=Kukushka1337");
+            string? host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+            string? port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+            string? dbName = Environment.GetEnvironmentVariable("POSTGRES_DB");
+            string? user = Environment.GetEnvironmentVariable("POSTGRES_USER");
+            string? password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+            
+            Log.Logger.Debug($"Host={host};Port={port};Database={dbName};Username={user};Password={password}");
+            
+            optionsBuilder.UseNpgsql($"Host={host};Port={port};Database={dbName};Username={user};Password={password}");
         }
     }
 }
