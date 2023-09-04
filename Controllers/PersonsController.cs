@@ -10,7 +10,7 @@ namespace HallOfFame_Test.Controllers
     public class PersonsController : ControllerBase
     {
         private readonly ILogger<PersonsController> _logger;
-
+        
         public PersonsController(ILogger<PersonsController> logger)
         {
             _logger = logger;
@@ -48,7 +48,7 @@ namespace HallOfFame_Test.Controllers
                     return person == null ? NotFound() : Ok(person);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Log.Logger.Error(e.Message);
                 return StatusCode(500);
@@ -67,7 +67,7 @@ namespace HallOfFame_Test.Controllers
                     return StatusCode(200);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Log.Logger.Error(e.Message);
                 return StatusCode(500);
@@ -109,7 +109,7 @@ namespace HallOfFame_Test.Controllers
                     return StatusCode(200);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Log.Logger.Error(e.Message);
                 return StatusCode(500);
