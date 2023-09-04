@@ -72,7 +72,7 @@ namespace HallOfFame_Test.Controllers
                 {
                     db.Persons.Add(person);
                     db.SaveChanges();
-                    return StatusCode(200);
+                    return Ok();
                 }
             }
             catch (Exception e)
@@ -101,12 +101,15 @@ namespace HallOfFame_Test.Controllers
                     Person findPerson = db.Persons.Include(p => p.skills).FirstOrDefault(x => x.id == id);
                     if (findPerson == null)
                     {
-                        return StatusCode(404, "Person not found!");
+                        return NotFound("Person not found!");
                     }
 
+                    // Проходимся по каждому скиллу
                     foreach (var skill in person.skills)
                     {
                         var findSkill = findPerson.skills.FirstOrDefault(s => s.name == skill.name);
+                        // Если скилл найден, то меняем ему уровень
+                        // Если нет - добавляем
                         if (findSkill != null)
                         {
                             findSkill.level = skill.level;
@@ -122,7 +125,7 @@ namespace HallOfFame_Test.Controllers
 
                     db.SaveChanges();
 
-                    return StatusCode(200);
+                    return Ok();
                 }
             }
             catch (Exception e)
@@ -150,13 +153,13 @@ namespace HallOfFame_Test.Controllers
                     Person? findPerson = db.Persons.FirstOrDefault(x => x.id == id);
                     if (findPerson == null)
                     {
-                        return StatusCode(404, "Person not found!");
+                        return NotFound("Person not found!");
                     }
 
                     db.Persons.Remove(findPerson);
                     db.SaveChanges();
                     
-                    return StatusCode(200);
+                    return Ok();
                 }
             }
             catch (Exception e)
