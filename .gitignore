@@ -1,0 +1,8 @@
+﻿.vscode/
+.idea/
+.vs/
+.fleet/
+.cr/
+/bin/
+/obj/
+/packages/
