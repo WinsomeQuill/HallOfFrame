@@ -41,6 +41,11 @@ namespace HallOfFame_Test.Controllers
         {
             try
             {
+                if (id <= 0)
+                {
+                    return BadRequest("Id cannot negative!");
+                }
+                
                 Log.Logger.Debug($"Get person by id: {id}");
                 using (ApplicationContext db = new())
                 {
@@ -79,6 +84,11 @@ namespace HallOfFame_Test.Controllers
         {
             try
             {
+                if (id <= 0)
+                {
+                    return BadRequest("Id cannot negative!");
+                }
+                
                 Log.Logger.Debug($"Update person by id: {id}");
                 using (ApplicationContext db = new ApplicationContext())
                 {
@@ -121,6 +131,11 @@ namespace HallOfFame_Test.Controllers
         {
             try
             {
+                if (id <= 0)
+                {
+                    return BadRequest("Id cannot negative!");
+                }
+                
                 using (ApplicationContext db = new())
                 {
                     Person? findPerson = db.Persons.FirstOrDefault(x => x.id == id);
