@@ -13,11 +13,11 @@ COPY . .
 RUN dotnet tool install --global dotnet-ef
 ENV PATH="${PATH}:/root/.dotnet/tools"
 
-ENV POSTGRES_HOST="192.168.1.14"
+ENV POSTGRES_HOST="postgres-db"
 ENV POSTGRES_PORT="5432"
 ENV POSTGRES_DB="HOF_Test"
 ENV POSTGRES_USER="artem"
-ENV POSTGRES_PASSWORD="kukushka1337"
+ENV POSTGRES_PASSWORD="password"
 
 RUN dotnet build
 

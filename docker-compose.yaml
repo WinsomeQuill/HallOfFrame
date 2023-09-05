@@ -13,17 +13,15 @@ services:
     networks:
       - my-network
 
-  # Not using. Maybe i can connecting?
   postgres-db:
     image: postgres:latest
     container_name: postgresql-db
     restart: always
     environment:
-      - POSTGRES_HOST=127.0.0.1
-      - POSTGRES_PORT=5432
-      - POSTGRES_DB=HOF_Test
       - POSTGRES_USER=artem
-      - POSTGRES_PASSWORD=kukushka1337
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=HOF_Test
+      - POSTGRES_HOST_AUTH_METHOD=trust
     networks:
       - my-network
 
