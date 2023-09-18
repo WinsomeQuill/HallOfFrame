@@ -22,7 +22,18 @@ namespace HallOfFame_Test.Controllers
         {
             try
             {
-                List<Person> persons = await _db.Persons.Include(p => p.Skills).ToListAsync();
+                List<PersonDto> persons = await _db.Persons.Include(p => p.Skills)
+                    .Select(p => new PersonDto
+                    {
+                        Name = p.Name,
+                        DisplayName = p.DisplayName,
+                        Skills = p.Skills.Select(s => new SkillDto
+                        {
+                            Name = s.Name,
+                            Level = s.Level
+                        }).ToList()
+                    })
+                    .ToListAsync();
                 return Ok(persons);
             }
             catch (Exception e)
@@ -47,7 +58,24 @@ namespace HallOfFame_Test.Controllers
                 
                 _logger.LogDebug($"Get person by id: {id}", DateTime.UtcNow.ToLongTimeString());
                 Person? person = await _db.Persons.Include(p => p.Skills).FirstOrDefaultAsync(x => x.Id == id);
-                return person == null ? NotFound() : Ok(person);
+
+                if (person == null)
+                {
+                    return NotFound("Person not found");
+                }
+                
+                PersonDto personDto = new PersonDto
+                {
+                    Name = person.Name,
+                    DisplayName = person.DisplayName,
+                    Skills = person.Skills.Select(s => new SkillDto
+                    {
+                        Name = s.Name,
+                        Level = s.Level
+                    }).ToList()
+                };
+                
+                return Ok(personDto);
             }
             catch (Exception e)
             {
