@@ -1,7 +1,6 @@
 using HallOfFame_Test.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 namespace HallOfFame_Test.Controllers
 {
@@ -28,7 +27,7 @@ namespace HallOfFame_Test.Controllers
             }
             catch (Exception e)
             {
-                Log.Logger.Error(e.Message);
+                _logger.LogError(e.Message, DateTime.UtcNow.ToLongTimeString());
                 return StatusCode(500);
             }
         }
@@ -46,13 +45,13 @@ namespace HallOfFame_Test.Controllers
                     return BadRequest("Id cannot negative!");
                 }
                 
-                Log.Logger.Debug($"Get person by id: {id}");
+                _logger.LogDebug($"Get person by id: {id}", DateTime.UtcNow.ToLongTimeString());
                 Person? person = _db.Persons.Include(p => p.Skills).FirstOrDefault(x => x.Id == id);
                 return person == null ? NotFound() : Ok(person);
             }
             catch (Exception e)
             {
-                Log.Logger.Error(e.Message);
+                _logger.LogError(e.Message, DateTime.UtcNow.ToLongTimeString());
                 return StatusCode(500);
             }
         }
@@ -70,7 +69,7 @@ namespace HallOfFame_Test.Controllers
             }
             catch (Exception e)
             {
-                Log.Logger.Error(e.Message);
+                _logger.LogError(e.Message, DateTime.UtcNow.ToLongTimeString());
                 return StatusCode(500);
             }
         }
@@ -88,7 +87,7 @@ namespace HallOfFame_Test.Controllers
                     return BadRequest("Id cannot negative!");
                 }
                 
-                Log.Logger.Debug($"Update person by id: {id}");
+                _logger.LogDebug($"Update person by id: {id}", DateTime.UtcNow.ToLongTimeString());
                 Person findPerson = _db.Persons.Include(p => p.Skills).FirstOrDefault(x => x.Id == id);
                 if (findPerson == null)
                 {
@@ -120,7 +119,7 @@ namespace HallOfFame_Test.Controllers
             }
             catch (Exception e)
             {
-                Log.Logger.Error(e.Message);
+                _logger.LogError(e.Message, DateTime.UtcNow.ToLongTimeString());
                 return StatusCode(500);
             }
         }
@@ -151,7 +150,7 @@ namespace HallOfFame_Test.Controllers
             }
             catch (Exception e)
             {
-                Log.Logger.Error(e.Message);
+                _logger.LogError(e.Message, DateTime.UtcNow.ToLongTimeString());
                 return StatusCode(500);
             }
         }
