@@ -23,56 +23,56 @@ namespace HallOfFame_Test.Migrations
 
             modelBuilder.Entity("HallOfFame_Test.Models.Person", b =>
                 {
-                    b.Property<long>("id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("displayName")
+                    b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Person");
                 });
 
             modelBuilder.Entity("HallOfFame_Test.Models.Skill", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<byte>("level")
+                    b.Property<byte>("Level")
                         .HasColumnType("smallint");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("Skill");
                 });
 
             modelBuilder.Entity("PersonSkill", b =>
                 {
-                    b.Property<long>("Personid")
+                    b.Property<long>("PersonId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("skillsid")
+                    b.Property<int>("SkillsId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Personid", "skillsid");
+                    b.HasKey("PersonId", "SkillsId");
 
-                    b.HasIndex("skillsid");
+                    b.HasIndex("SkillsId");
 
                     b.ToTable("PersonSkills", (string)null);
                 });
@@ -81,13 +81,13 @@ namespace HallOfFame_Test.Migrations
                 {
                     b.HasOne("HallOfFame_Test.Models.Person", null)
                         .WithMany()
-                        .HasForeignKey("Personid")
+                        .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HallOfFame_Test.Models.Skill", null)
                         .WithMany()
-                        .HasForeignKey("skillsid")
+                        .HasForeignKey("SkillsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

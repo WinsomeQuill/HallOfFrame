@@ -10,10 +10,12 @@ namespace HallOfFame_Test.Controllers
     public class PersonsController : ControllerBase
     {
         private readonly ILogger<PersonsController> _logger;
+        private readonly ApplicationContext _db;
         
-        public PersonsController(ILogger<PersonsController> logger)
+        public PersonsController(ILogger<PersonsController> logger, ApplicationContext db)
         {
             _logger = logger;
+            _db = db;
         }
 
         [HttpGet]
@@ -21,11 +23,8 @@ namespace HallOfFame_Test.Controllers
         {
             try
             {
-                using (ApplicationContext db = new())
-                {
-                    List<Person> persons = db.Persons.Include(p => p.skills).ToList();
-                    return Ok(persons);
-                }
+                List<Person> persons = _db.Persons.Include(p => p.Skills).ToList();
+                return Ok(persons);
             }
             catch (Exception e)
             {
@@ -48,11 +47,8 @@ namespace HallOfFame_Test.Controllers
                 }
                 
                 Log.Logger.Debug($"Get person by id: {id}");
-                using (ApplicationContext db = new())
-                {
-                    Person? person = db.Persons.Include(p => p.skills).FirstOrDefault(x => x.id == id);
-                    return person == null ? NotFound() : Ok(person);
-                }
+                Person? person = _db.Persons.Include(p => p.Skills).FirstOrDefault(x => x.Id == id);
+                return person == null ? NotFound() : Ok(person);
             }
             catch (Exception e)
             {
@@ -68,12 +64,9 @@ namespace HallOfFame_Test.Controllers
         {
             try
             {
-                using (ApplicationContext db = new())
-                {
-                    db.Persons.Add(person);
-                    db.SaveChanges();
-                    return Ok();
-                }
+                _db.Persons.Add(person);
+                _db.SaveChanges();
+                return Ok();
             }
             catch (Exception e)
             {
@@ -96,37 +89,34 @@ namespace HallOfFame_Test.Controllers
                 }
                 
                 Log.Logger.Debug($"Update person by id: {id}");
-                using (ApplicationContext db = new ApplicationContext())
+                Person findPerson = _db.Persons.Include(p => p.Skills).FirstOrDefault(x => x.Id == id);
+                if (findPerson == null)
                 {
-                    Person findPerson = db.Persons.Include(p => p.skills).FirstOrDefault(x => x.id == id);
-                    if (findPerson == null)
-                    {
-                        return NotFound("Person not found!");
-                    }
-
-                    // Проходимся по каждому скиллу
-                    foreach (var skill in person.skills)
-                    {
-                        var findSkill = findPerson.skills.FirstOrDefault(s => s.name == skill.name);
-                        // Если скилл найден, то меняем ему уровень
-                        // Если нет - добавляем
-                        if (findSkill != null)
-                        {
-                            findSkill.level = skill.level;
-                        }
-                        else
-                        {
-                            findPerson.skills.Add(skill);
-                        }
-                    }
-
-                    findPerson.name = person.name;
-                    findPerson.displayName = person.displayName;
-
-                    db.SaveChanges();
-
-                    return Ok();
+                    return NotFound("Person not found!");
                 }
+
+                // Проходимся по каждому скиллу
+                foreach (var skill in person.Skills)
+                {
+                    var findSkill = findPerson.Skills.FirstOrDefault(s => s.Name == skill.Name);
+                    // Если скилл найден, то меняем ему уровень
+                    // Если нет - добавляем
+                    if (findSkill != null)
+                    {
+                        findSkill.Level = skill.Level;
+                    }
+                    else
+                    {
+                        findPerson.Skills.Add(skill);
+                    }
+                }
+
+                findPerson.Name = person.Name;
+                findPerson.DisplayName = person.DisplayName;
+
+                _db.SaveChanges();
+
+                return Ok();
             }
             catch (Exception e)
             {
@@ -148,19 +138,16 @@ namespace HallOfFame_Test.Controllers
                     return BadRequest("Id cannot negative!");
                 }
                 
-                using (ApplicationContext db = new())
+                Person? findPerson = _db.Persons.FirstOrDefault(x => x.Id == id);
+                if (findPerson == null)
                 {
-                    Person? findPerson = db.Persons.FirstOrDefault(x => x.id == id);
-                    if (findPerson == null)
-                    {
-                        return NotFound("Person not found!");
-                    }
-
-                    db.Persons.Remove(findPerson);
-                    db.SaveChanges();
-                    
-                    return Ok();
+                    return NotFound("Person not found!");
                 }
+
+                _db.Persons.Remove(findPerson);
+                _db.SaveChanges();
+                    
+                return Ok();
             }
             catch (Exception e)
             {

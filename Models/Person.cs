@@ -8,15 +8,15 @@ namespace HallOfFame_Test.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long id { get; set; }
+        public long Id { get; set; }
 
         [Required]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public string displayName { get; set; }
+        public string DisplayName { get; set; }
 
         [Required]
-        public List<Skill> skills { get; set; }
+        public List<Skill> Skills { get; set; }
     }
 }

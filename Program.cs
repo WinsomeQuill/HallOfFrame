@@ -1,4 +1,5 @@
 using HallOfFame_Test.Models;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace HallOfFame_Test
@@ -12,6 +13,9 @@ namespace HallOfFame_Test
             builder.Services.AddControllers();
             
             builder.Services.AddSwaggerGen();
+            
+            builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationContext>(opt =>
+                opt.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection")));
             
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()

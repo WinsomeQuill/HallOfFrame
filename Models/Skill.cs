@@ -8,12 +8,12 @@ namespace HallOfFame_Test.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public byte level { get; set; }
+        public byte Level { get; set; }
     }
 }
