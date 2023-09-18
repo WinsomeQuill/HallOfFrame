@@ -18,11 +18,11 @@ namespace HallOfFame_Test.Controllers
         }
 
         [HttpGet]
-        public IActionResult Persons()
+        async public Task<IActionResult> Persons()
         {
             try
             {
-                List<Person> persons = _db.Persons.Include(p => p.Skills).ToList();
+                List<Person> persons = await _db.Persons.Include(p => p.Skills).ToListAsync();
                 return Ok(persons);
             }
             catch (Exception e)
@@ -36,7 +36,7 @@ namespace HallOfFame_Test.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Person))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Person(long id)
+        async public Task<IActionResult> Person(long id)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace HallOfFame_Test.Controllers
                 }
                 
                 _logger.LogDebug($"Get person by id: {id}", DateTime.UtcNow.ToLongTimeString());
-                Person? person = _db.Persons.Include(p => p.Skills).FirstOrDefault(x => x.Id == id);
+                Person? person = await _db.Persons.Include(p => p.Skills).FirstOrDefaultAsync(x => x.Id == id);
                 return person == null ? NotFound() : Ok(person);
             }
             catch (Exception e)
@@ -59,12 +59,12 @@ namespace HallOfFame_Test.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CreatePerson(Person person)
+        async public Task<IActionResult> CreatePerson(Person person)
         {
             try
             {
-                _db.Persons.Add(person);
-                _db.SaveChanges();
+                await _db.Persons.AddAsync(person);
+                await _db.SaveChangesAsync();
                 return Ok();
             }
             catch (Exception e)
@@ -78,7 +78,7 @@ namespace HallOfFame_Test.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult UpdatePerson(long id, Person person)
+        async public Task<IActionResult> UpdatePerson(long id, Person person)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace HallOfFame_Test.Controllers
                 }
                 
                 _logger.LogDebug($"Update person by id: {id}", DateTime.UtcNow.ToLongTimeString());
-                Person findPerson = _db.Persons.Include(p => p.Skills).FirstOrDefault(x => x.Id == id);
+                Person findPerson = await _db.Persons.Include(p => p.Skills).FirstOrDefaultAsync(x => x.Id == id);
                 if (findPerson == null)
                 {
                     return NotFound("Person not found!");
@@ -113,7 +113,7 @@ namespace HallOfFame_Test.Controllers
                 findPerson.Name = person.Name;
                 findPerson.DisplayName = person.DisplayName;
 
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
                 return Ok();
             }
@@ -128,7 +128,7 @@ namespace HallOfFame_Test.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult DeletePerson(long id)
+        async public Task<IActionResult> DeletePerson(long id)
         {
             try
             {
@@ -137,14 +137,14 @@ namespace HallOfFame_Test.Controllers
                     return BadRequest("Id cannot negative!");
                 }
                 
-                Person? findPerson = _db.Persons.FirstOrDefault(x => x.Id == id);
+                Person? findPerson = await _db.Persons.FirstOrDefaultAsync(x => x.Id == id);
                 if (findPerson == null)
                 {
                     return NotFound("Person not found!");
                 }
 
                 _db.Persons.Remove(findPerson);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                     
                 return Ok();
             }
