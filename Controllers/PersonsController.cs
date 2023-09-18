@@ -94,22 +94,27 @@ namespace HallOfFame_Test.Controllers
                     return NotFound("Person not found!");
                 }
 
-                // Проходимся по каждому скиллу
-                foreach (var skill in person.Skills)
+                List<Skill> skills = new List<Skill>();
+
+                // Перебираем скиллы
+                // Это позволяет использовать существующие объекты
+                foreach (Skill skill in person.Skills)
                 {
-                    var findSkill = findPerson.Skills.FirstOrDefault(s => s.Name == skill.Name);
-                    // Если скилл найден, то меняем ему уровень
-                    // Если нет - добавляем
+                    // Ищем скилл в бд
+                    Skill findSkill = await _db.Skills.FirstOrDefaultAsync(x => x.Name == skill.Name);
+                    // Если найден, то добавляем скилл из бд в список
                     if (findSkill != null)
                     {
                         findSkill.Level = skill.Level;
+                        skills.Add(findSkill);
+                        continue;
                     }
-                    else
-                    {
-                        findPerson.Skills.Add(skill);
-                    }
+
+                    // Если не найден, то добавляем скилл в список и при SaveChanges данные скилл создасться в бд
+                    skills.Add(skill);
                 }
 
+                findPerson.Skills = skills;
                 findPerson.Name = person.Name;
                 findPerson.DisplayName = person.DisplayName;
 
